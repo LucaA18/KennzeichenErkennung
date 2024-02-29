@@ -12,6 +12,16 @@
             100% { transform: rotate(360deg); }
         }
 
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center; /* Center align content */
+            background-color: #f0f0f0; /* Background color */
+            background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapercave.com%2Fwp%2Fwp3429465.jpg&f=1&nofb=1&ipt=37a8215d429075718cda449b1ffc01456beddaa3d2ad96a1928f460744fd204e&ipo=images'); /* Background image */
+            background-size: cover; /* Cover the entire background */
+            background-repeat: repeat; /* Do not repeat the background image */
+            padding-top: 20px; /* Add some padding to the top */
+        }
+
         .spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
             border-left-color: #333;
@@ -43,28 +53,39 @@
             background-color: #45a049;
             transform: scale(1,1);
         }
-        #delete-button{
-            background-color: #af4c4c;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
 
         /* Form input styles */
         input[type="text"], input[type="file"] {
             padding: 10px;
             margin: 5px 0;
-            border: 1px solid #ffffff;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box;    
+            box-sizing: border-box;
+        }
+
+        /* Video container styles */
+        .video-container {
+            display: inline-block;
+            vertical-align: top;
+            margin: 20px;
+            width: 300px; /* Fixed width */
+            height: 200px; /* Fixed height */
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%; /* Make video fill container */
+            border-radius: 5px;
+            object-fit: cover; /* Ensure video maintains aspect ratio and fills container */
+        }
+
+        .video-info {
+            margin-top: 10px;
+            background-color: rgb(100, 90, 90);
+        }
+
+        .video-info p {
+            margin: 5px 0;
         }
     </style>
 </head>
@@ -81,18 +102,20 @@
     
     <div id="video-gallery"> 
         {% for video in videos %}
-            <div class="video-container" width="300px" height="250px">
-                <video width="30%" height="30%" controls>
+            <div class="video-container">
+                <video controls>
                     <source src="{{ url_for('static', filename=video.filename) }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>              
-                <p>{{ video.filename }}</p>
-                <p>Label: {{ video.label }}</p>
-                <form action="/" method="post" enctype="multipart/form-data">
-                    <input type="text" name="input_numberPlate" placeholder="Please enter number plate" class="button">
-                </form>
-                <a class="run-model-button button" href="#" onclick="runModel('{{ video.filename }}')">Run Model</a>
-                <a class="delete-button" id="delete-button" href="{{ url_for('delete_video', filename=video.filename) }}">Delete this Video</video></a> <!-- Delete button -->
+                <div class="video-info">
+                    <p>{{ video.filename }}</p>
+                    <p>Label: {{ video.label }}</p>
+                    <form action="/" method="post" enctype="multipart/form-data">
+                        <input type="text" name="input_numberPlate" placeholder="Please enter number plate" class="button">
+                    </form>
+                    <a class="run-model-button button" href="#" onclick="runModel('{{ video.filename }}')">Run Model</a>
+                    <a class="delete-button" id="delete-button" href="{{ url_for('delete_video', filename=video.filename) }}">Delete this Video</a> <!-- Delete button -->
+                </div>
             </div>
         {% endfor %}
     </div>
@@ -123,19 +146,3 @@
     </script>
 </body>
 </html>
-
-
-<!-- 
-    ToDo:
-    [X] er kann das Bild anzeigen (Screenshot vom gesuchten Kennzeichen)
-    [X] runterladen von dem Bild
-    [X] suchbox zur eingabe für das gesuchte kennzeichen (+ übergabe an model)
-    [X] während model kompiliert etwas anzeigen
-        [ ] text ausgabe vom terminal
-            -> zu komplex
-        [X] ding das sich dreht
-    [X] button um die modellausführung abzubrechen
-    [X] frame anzeigen lassen wo das kennzeichen erkannt wurde?
-
-
- -->
