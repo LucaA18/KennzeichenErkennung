@@ -1,0 +1,8 @@
+For the Website you need Flask.
+To start the webserver you have to load the virtual environment.
+For Powershell please use these commands to run it locally:
+# to load the environment
+.\plate\licenseVirtual\bin\Activate.ps1
+
+#run flask
+flask run
