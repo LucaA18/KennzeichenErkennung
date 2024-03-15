@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Model</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            background-image: url('http://127.0.0.1:5000/static/images/60prc.png');
+            background-size: cover;
+            background-repeat: repeat; 
+            padding-top: 20px; 
+        }
+        h1{
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 1);
+            transition: transform 0.5s ease-in-out;
+        }
+        h1:hover{
+            transform: scale(3)  rotate(360deg);
+        }
+
+        div{
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 1);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        p {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 1);
+        }
+        p:hover{
+            background-color: #c0c0c0;
+        }
+
+
+        #result-image:hover {
+            transform: scale(1.1);
+        }
+
+        #result-image{
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 1);
+        }
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1,1);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="font-size:3vw">Results</h1><br>
+    {% if found %}
+        <div>Running number plate detection model on video '{{ video }}' is completed and was successful.<br>
+        {{result | safe}}.</div>
+        <br>
+        <img id="result-image" src="{{ url_for('static', filename='images/screenshot_foundPLate.jpg') }}" alt="This is the Screenshot where we found the input Number Plate." style="max-width:50%;height:auto;">
+        <br>
+        <button id="download-button">Download Image</button>
+    {% else %}
+    <div>
+        <p>Running number plate detection model on video '{{ video }}' is completed.</p>
+        <br>
+        <p>Unfortunately the number plate could not be found in this video.<br>
+        Here is John Travolta looking for the number plate in this video...</p>
+        <br>
+        <iframe src="https://giphy.com/embed/6uGhT1O4sxpi8" width="480" height="240" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        <br>
+        <p>Please make sure that the number plate is clearly visible within the video.<br>
+        Higher video resolution helps alot and also ensure the spelling of the number plate (you don't have to include dashes)<br>
+        For example if you want to search for the number plate 'TÜ-GM-1728' then please search for 'TÜGM1728'.</p>
+    </div>
+    {% endif %}
+
+    <script>
+        document.getElementById('download-button').addEventListener('click', function() {
+            var imageUrl = document.getElementById('result-image').src;
+            var link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = 'screenshot_foundPLate.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
+</body>
+</html>
